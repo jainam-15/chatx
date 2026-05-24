@@ -12,7 +12,7 @@ workflows:
         script: |
           echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
       - name: Generate Xcode Config
-        script: flutter build ios --config-only
+        script: flutter build ios --config-only --simulator --debug
       - name: Install iOS CocoaPods
         script: |
           cd ios
