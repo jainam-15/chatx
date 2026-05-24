@@ -11,10 +11,6 @@ workflows:
       - name: Set up local properties
         script: |
           echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
-      - name: Install iOS CocoaPods
-        script: |
-          cd ios
-          pod install --repo-update
       - name: Build Flutter iOS for Simulator
         script: |
           # Build a debug simulator app (.app) with verbose logging
