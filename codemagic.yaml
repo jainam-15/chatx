@@ -1,0 +1,31 @@
+workflows:
+  ios-simulator-build:
+    name: iOS Simulator Build (Appetize.io)
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Set up local properties
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
+      - name: Build Flutter iOS for Simulator
+        script: |
+          # Build a debug simulator app (.app)
+          # Flutter automatically creates the Podfile and runs pod install
+          flutter build ios --simulator --debug
+      - name: Package for Appetize.io
+        script: |
+          # Appetize requires a zipped .app folder
+          cd build/ios/iphonesimulator
+          # The resulting directory is usually Runner.app
+          zip -r -q ChatX_Simulator.zip Runner.app
+    artifacts:
+      - build/ios/iphonesimulator/ChatX_Simulator.zip
+    publishing:
+      scripts:
+        - name: Print Appetize instructions
+          script: |
+            echo "Build successful! Download ChatX_Simulator.zip from the Artifacts section on Codemagic and upload it directly to Appetize.io"

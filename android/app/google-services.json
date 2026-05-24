@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "464056919731",
+    "project_id": "chatx-v2-a88a5",
+    "storage_bucket": "chatx-v2-a88a5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:464056919731:android:dff54a600ee9d936cdb2c6",
+        "android_client_info": {
+          "package_name": "com.example.chatx_interview_task"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYamgBB9WfUeiIuWa_F7WSUzWD_0wEZ2A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

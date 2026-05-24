@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "chatx-v2-a88a5",
+    "chatx-v2": "chatx-v2-a88a5"
+  },
+  "targets": {},
+  "etags": {}
+}
