@@ -110,7 +110,13 @@ class _ShellScreenState extends ConsumerState<ShellScreen> {
           VerticalDivider(color: Theme.of(context).colorScheme.outline.withOpacity(0.2), width: 1),
           Expanded(
             child: activeRoomId != null
-                ? ChatDetailScreen(roomId: activeRoomId)
+                ? ChatDetailScreen(
+                    roomId: activeRoomId,
+                    onBack: () {
+                      ref.read(selectedChatProvider.notifier).state = null;
+                      context.go(RoutePaths.chatList);
+                    },
+                  )
                 : _buildPlaceholderView(),
           ),
         ],

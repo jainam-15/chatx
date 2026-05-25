@@ -122,6 +122,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
           final hasUnread = messages.any((m) => m.senderId != self.id && !m.readBy.contains(self.id));
           if (hasUnread) {
             ref.read(chatControllerProvider).markRoomMessagesAsRead(widget.roomId, self.id);
+            ref.read(chatControllerProvider).clearRoomUnreads(widget.roomId);
           }
         }
         _scrollToBottom();

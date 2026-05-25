@@ -9,7 +9,7 @@ setGlobalOptions({
 });
 
 exports.sendChatNotification = onDocumentCreated(
-  "chats/{chatId}/messages/{messageId}",
+  "chat_rooms/{chatId}/messages/{messageId}",
   async (event) => {
     try {
       const snapshot = event.data;
@@ -45,13 +45,7 @@ exports.sendChatNotification = onDocumentCreated(
 
       // IMPORTANT CONDITIONS
 
-      // 1. Logged out user → no notification
-      if (!userData.isOnline) {
-        console.log("User offline/logged out");
-        return;
-      }
-
-      // 2. Same chat open → no notification
+      // 1. Same chat open → no notification
       if (userData.activeChatId === chatId) {
         console.log("User already viewing chat");
         return;
@@ -74,7 +68,7 @@ exports.sendChatNotification = onDocumentCreated(
       const senderData = senderDoc.data();
 
       const senderName =
-        senderData?.name ||
+        senderData?.displayName ||
         senderData?.email ||
         "New Message";
 
