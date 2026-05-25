@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../core/routing/app_router.dart';
 import '../core/routing/route_paths.dart';
 import '../core/utils/logger.dart';
@@ -163,20 +164,24 @@ class NotificationService {
   }
 
   void _navigateToRoom(String roomId) {
-    final context = navigatorKey.currentContext;
-
-    if (context == null) {
-      print("Navigator context is null");
-      return;
-    }
-
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => ChatDetailScreen(
-          roomId: roomId,
-        ),
-      ),
-    );
+    Logger.info(_tag, 'Navigating to chat room: $roomId');
+    
+    // Ensure the app has time to mount the router before navigating,
+    // especially important when opening from a terminated state.
+    Future.delayed(const Duration(milliseconds: 100), () {
+      try {
+        if (navigatorKey.currentContext != null) {
+          _ref.read(routerProvider).go(RoutePaths.chatDetail.replaceAll(':roomId', roomId));
+        } else {
+          Logger.warning(_tag, 'Navigator context still null after delay. Retrying...');
+          Future.delayed(const Duration(milliseconds: 500), () {
+             _ref.read(routerProvider).go(RoutePaths.chatDetail.replaceAll(':roomId', roomId));
+          });
+        }
+      } catch (e, stack) {
+        Logger.error(_tag, 'Failed to navigate to room', e, stack);
+      }
+    });
   }
 
   // Handle notification tap payload
