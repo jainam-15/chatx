@@ -5,6 +5,7 @@ import 'route_paths.dart';
 import '../../providers/auth_provider.dart';
 import '../../screens/login_screen.dart';
 import '../../screens/register_screen.dart';
+import '../../screens/landing_screen.dart';
 import '../../screens/shell_screen.dart';
 import '../../screens/chat_detail_screen.dart';
 import '../../screens/splash_screen.dart';
@@ -42,25 +43,26 @@ final routerProvider = Provider<GoRouter>((ref) {
       final authState = ref.read(authNotifierProvider);
       final status = authState.status;
 
-      final isLoggingIn = state.matchedLocation == RoutePaths.login ||
-          state.matchedLocation == RoutePaths.register;
+      final isPublicRoute = state.matchedLocation == RoutePaths.login ||
+          state.matchedLocation == RoutePaths.register ||
+          state.matchedLocation == RoutePaths.landing;
 
       // During initial startup or loading, stay on splash screen
       if (status == AuthStatus.initial || status == AuthStatus.loading) {
         return state.matchedLocation == RoutePaths.splash ? null : RoutePaths.splash;
       }
 
-      // Guard: Unauthenticated users go to Login
+      // Guard: Unauthenticated users go to landing/login
       if (status == AuthStatus.unauthenticated || status == AuthStatus.error) {
-        if (!isLoggingIn) {
-          return RoutePaths.login;
+        if (!isPublicRoute) {
+          return RoutePaths.landing;
         }
         return null;
       }
 
-      // Guard: Authenticated users go to Chats, away from login screens and splash
+      // Guard: Authenticated users go to Chats, away from public screens and splash
       if (status == AuthStatus.authenticated) {
-        if (isLoggingIn || state.matchedLocation == RoutePaths.splash) {
+        if (isPublicRoute || state.matchedLocation == RoutePaths.splash) {
           return RoutePaths.chatList;
         }
         return null;
@@ -82,6 +84,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: RoutePaths.splash,
         builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: RoutePaths.landing,
+        builder: (context, state) => const LandingScreen(),
       ),
       GoRoute(
         path: RoutePaths.login,
